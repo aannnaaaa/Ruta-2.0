@@ -7,17 +7,17 @@
 <div class="container mt-5">
     <div class="card mb-4 border-0 shadow-sm">
         <div class="card-body">
-            <small class="text-muted mb-3 d-block">{{ post.created_at|date:"d февраля Y года" }}</small>
+            <small class="text-muted mb-3 d-block">{{ post.created_at|date:"d F Y" }}</small>
             <h1 class="card-title mb-4">{{ post.title }}</h1>
             <p class="mb-3">
                 <strong>Автор:</strong>
-                <a href="{% url 'profiles:profile' username=post.user.username %}" class="custom-link">{{ post.user.get_full_name|default:post.user.username }}</a>
+                <a href="{% url 'profiles:profile-detail' username=post.user.username %}" class="custom-link">{{ post.user.get_full_name|default:post.user.username }}</a>
             </p>
-            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" class="img-fluid rounded mb-4" alt="{{ post.title }}">
+            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/post-placeholder.jpg' %}{% endif %}" class="img-fluid rounded mb-4" alt="{{ post.title }}">
             <div class="post-tags mb-4">
                 <strong>Теги:</strong>
-                {% if post.tags %}
-                    {% for tag in post.tags %}
+                {% if tags %}
+                    {% for tag in tags %}
                         <span class="badge bg-secondary">{{ tag }}</span>
                     {% endfor %}
                 {% else %}
@@ -36,10 +36,10 @@
         <div class="d-flex align-items-center gap-3">
             <small class="text-muted">Просмотров: {{ post.views }}</small>
             {% if request.user == post.user %}
-                <a href="{% url 'blog:edit_post' post.slug %}" class="btn custom-button">Редактировать</a>
+                <a href="{% url 'blog:edit_post' post.slug %}" class="btn btn-primary">Редактировать</a>
                 <a href="{% url 'blog:delete_post' post.slug %}" class="btn btn-outline-danger" onclick="return confirm('Вы уверены, что хотите удалить пост?')">Удалить</a>
             {% endif %}
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock %}

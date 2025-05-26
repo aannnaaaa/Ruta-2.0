@@ -1,24 +1,19 @@
-# trips/models.py
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 import uuid
 
 class Trip(models.Model):
-    STATUS_CHOICES = [
-        ('planned', 'Запланировано'),
-        ('completed', 'Посещено'),
-    ]
-
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='trips', verbose_name='Автор')
     title = models.CharField(max_length=200, verbose_name='Название')
     description = models.TextField(verbose_name='Описание', blank=True)
     image = models.ImageField(upload_to='trips/', blank=True, null=True, verbose_name='Изображение')
     date = models.DateField(verbose_name='Дата')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='planned', verbose_name='Статус')
     slug = models.SlugField(max_length=250, unique=True, blank=True, verbose_name='URL')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     tags = models.CharField(max_length=200, blank=True, verbose_name='Теги')
+    is_public = models.BooleanField(default=True, verbose_name='Публичный маршрут')
+    is_completed = models.BooleanField(default=False, verbose_name='Посещён')
 
     def save(self, *args, **kwargs):
         if not self.slug:

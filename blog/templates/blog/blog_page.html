@@ -1,21 +1,24 @@
+```
 {% extends "base_layout.html" %}
 {% load static %}
 
 {% block title %}Блог | Ruta{% endblock title %}
 
 {% block content %}
-<div class="container blog-section py-5">
-    <h1 class="section-title">Наш блог</h1>
+<div class="container blog-section py-3">
+    <h2 class="page-header mb-4">Наш блог</h2>
     <div class="row">
         {% for post in posts %}
             {% if forloop.first %}
                 <div class="col-12 mb-4">
                     <div class="card main-blog-card">
-                        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/default-blog.jpg' %}{% endif %}" class="blog-image" alt="{{ post.title }}">
+                        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/post-placeholder.jpg' %}{% endif %}" class="blog-image" alt="{{ post.title }}">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <a href="{% url 'blog:post_detail' post.slug %}" class="btn custom-button">Узнать больше</a>
-                                <small class="text-muted">{{ post.created_at|date:"d февраля Y года" }}</small>
+                                <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-primary">Узнать больше</a>
+                                <small class="text-muted">
+                                    <a href="{% url 'profiles:profile-detail' username=post.username %}" class="custom-link">{{ post.full_name }}</a> | {{ post.created_at|date:"d F Y" }}
+                                </small>
                             </div>
                             <h5 class="card-title">{{ post.title }}</h5>
                             <p class="card-text">{{ post.description|truncatechars:150 }}</p>
@@ -35,11 +38,13 @@
             {% else %}
                 <div class="col-12 col-md-6 col-lg-4 mb-4">
                     <div class="card blog-card">
-                        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/default-blog.jpg' %}{% endif %}" class="blog-image" alt="{{ post.title }}">
+                        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/post-placeholder.jpg' %}{% endif %}" class="blog-image" alt="{{ post.title }}">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <a href="{% if post.slug %}{% url 'blog:post_detail' post.slug %}{% else %}#{% endif %}" class="btn custom-button">Узнать больше</a>
-                                <small class="text-muted">{{ post.created_at|date:"d февраля Y года" }}</small>
+                                <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-primary">Узнать больше</a>
+                                <small class="text-muted">
+                                    <a href="{% url 'profiles:profile-detail' username=post.username %}" class="custom-link">{{ post.full_name }}</a> | {{ post.created_at|date:"d F Y" }}
+                                </small>
                             </div>
                             <h5 class="card-title">{{ post.title }}</h5>
                             <p class="card-text">{{ post.description|truncatechars:150 }}</p>
@@ -58,8 +63,11 @@
                 </div>
             {% endif %}
         {% empty %}
-            <p>Нет доступных постов.</p>
+            <div class="col-12 text-center">
+                <p>Нет доступных постов.</p>
+            </div>
         {% endfor %}
     </div>
 </div>
-{% endblock content %}
+{% endblock %}
+```

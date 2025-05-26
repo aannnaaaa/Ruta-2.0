@@ -7,6 +7,14 @@
 <div class="container mt-5 auth-container">
     <h1 class="text-center mb-4">Редактировать маршрут</h1>
 
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <form method="post" enctype="multipart/form-data" class="add-trip-form">
         {% csrf_token %}
         <input type="hidden" name="step" value="{{ step }}">
@@ -47,6 +55,7 @@
         {% if step == 2 %}
             <div class="card custom-card p-4 mb-5">
                 <h2 class="mb-4">Шаг 2: Точки маршрута</h2>
+                <p class="text-muted">Необходимо добавить хотя бы одну начальную и одну конечную точку маршрута.</p>
                 <div class="mb-3">
                     <label for="point_name" class="form-label">Название точки</label>
                     <input type="text" class="form-control" id="point_name" name="point_name">
@@ -95,6 +104,7 @@
                 {% endif %}
 
                 <div class="text-center">
+                    <button type="submit" class="btn btn-outline-secondary mr-2" name="prev_step">Назад</button>
                     <button type="submit" class="btn custom-button" name="next_step">Далее</button>
                 </div>
                 <div class="step-indicator">
@@ -103,22 +113,23 @@
             </div>
         {% endif %}
 
-        <!-- Step 3: Дата и статус маршрута -->
+        <!-- Step 3: Дата и публичность маршрута -->
         {% if step == 3 %}
             <div class="card custom-card p-4 mb-5">
-                <h2 class="mb-4">Шаг 3: Дата и статус</h2>
+                <h2 class="mb-4">Шаг 3: Дата и публичность</h2>
                 <div class="mb-3">
                     <label for="date" class="form-label">Дата маршрута</label>
                     <input type="date" class="form-control" id="date" name="date" value="{{ trip.date|date:'Y-m-d' }}" required>
                 </div>
                 <div class="mb-3">
-                    <label for="status" class="form-label">Статус маршрута</label>
-                    <select class="form-control" id="status" name="status">
-                        <option value="planned" {% if trip.status == 'planned' %}selected{% endif %}>Запланирован</option>
-                        <option value="completed" {% if trip.status == 'completed' %}selected{% endif %}>Пройден</option>
-                    </select>
+                    <label for="is_public" class="form-label">Публичность маршрута</label>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="is_public" name="is_public" {% if trip.is_public %}checked{% endif %}>
+                        <label class="form-check-label" for="is_public">Сделать маршрут публичным (видно всем пользователям)</label>
+                    </div>
                 </div>
                 <div class="text-center">
+                    <button type="submit" class="btn btn-outline-secondary mr-2" name="prev_step">Назад</button>
                     <button type="submit" class="btn custom-button" name="save">Сохранить маршрут</button>
                 </div>
                 <div class="step-indicator">
@@ -136,68 +147,87 @@
 <script>
 {% if step == 2 %}
     // Инициализация карты
-    var map = L.map('map').setView([55.7558, 37.6173], 10); // Центр Москвы
+    try {
+        var map = L.map('map').setView([55.7558, 37.6173], 10); // Центр Москвы
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-    var marker = null;
+        var marker = null;
 
-    // Функция геокодирования для получения адреса
-    function reverseGeocode(lat, lng) {
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.display_name) {
-                    document.getElementById('address').value = data.display_name;
-                    document.getElementById('point_name').value = data.address.road || data.address.suburb || data.address.city || data.display_name.split(',')[0];
+        // Функция геокодирования для получения адреса
+        function reverseGeocode(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`, {
+                headers: {
+                    'User-Agent': 'RutaApp/1.0 (your-email@example.com)'
                 }
             })
-            .catch(error => console.error('Ошибка геокодирования:', error));
-    }
-
-    // Обработчик клика по карте
-    map.on('click', function(e) {
-        var lat = e.latlng.lat;
-        var lng = e.latlng.lng;
-
-        // Удаляем предыдущий маркер, если он есть
-        if (marker) {
-            map.removeLayer(marker);
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.display_name) {
+                        document.getElementById('address').value = data.display_name;
+                        document.getElementById('point_name').value = data.address.road || data.address.suburb || data.address.city || data.display_name.split(',')[0];
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка геокодирования:', error);
+                    document.getElementById('address').value = 'Ошибка при получении адреса';
+                });
         }
 
-        // Добавляем новый маркер
-        marker = L.marker([lat, lng]).addTo(map)
-            .bindPopup(`Выбрано: [${lat.toFixed(6)}, ${lng.toFixed(6)}]`)
-            .openPopup();
+        // Обработчик клика по карте
+        map.on('click', function(e) {
+            try {
+                var lat = e.latlng.lat;
+                var lng = e.latlng.lng;
 
-        // Заполняем скрытые поля с координатами
-        document.getElementById('lat').value = lat.toFixed(6);
-        document.getElementById('lng').value = lng.toFixed(6);
+                // Удаляем предыдущий маркер, если он есть
+                if (marker) {
+                    map.removeLayer(marker);
+                }
 
-        // Выполняем геокодирование для получения адреса
-        reverseGeocode(lat, lng);
-    });
+                // Добавляем новый маркер
+                marker = L.marker([lat, lng]).addTo(map)
+                    .bindPopup(`Выбрано: [${lat.toFixed(6)}, ${lng.toFixed(6)}]`)
+                    .openPopup();
 
-    // Скрытые поля для координат
-    var latInput = document.createElement('input');
-    latInput.type = 'hidden';
-    latInput.name = 'lat';
-    latInput.id = 'lat';
-    var lngInput = document.createElement('input');
-    lngInput.type = 'hidden';
-    lngInput.name = 'lng';
-    lngInput.id = 'lng';
-    document.querySelector('.add-trip-form').appendChild(latInput);
-    document.querySelector('.add-trip-form').appendChild(lngInput);
+                // Заполняем скрытые поля с координатами
+                document.getElementById('lat').value = lat.toFixed(6);
+                document.getElementById('lng').value = lng.toFixed(6);
 
-    // Отображаем существующие точки на карте
-    {% for point in points %}
-        L.marker([{{ point.latitude|default:"55.7558" }}, {{ point.longitude|default:"37.6173" }}])
-            .addTo(map)
-            .bindPopup("<b>{{ point.name }}</b><br>{{ point.address|default:'Не указан' }}");
-    {% endfor %}
+                // Выполняем геокодирование для получения адреса
+                reverseGeocode(lat, lng);
+            } catch (error) {
+                console.error('Ошибка при обработке клика по карте:', error);
+            }
+        });
+
+        // Скрытые поля для координат
+        var latInput = document.createElement('input');
+        latInput.type = 'hidden';
+        latInput.name = 'lat';
+        latInput.id = 'lat';
+        var lngInput = document.createElement('input');
+        lngInput.type = 'hidden';
+        lngInput.name = 'lng';
+        lngInput.id = 'lng';
+        document.querySelector('.add-trip-form').appendChild(latInput);
+        document.querySelector('.add-trip-form').appendChild(lngInput);
+
+        // Отображаем существующие точки на карте
+        {% for point in points %}
+            try {
+                L.marker([{{ point.latitude|default:"55.7558" }}, {{ point.longitude|default:"37.6173" }}])
+                    .addTo(map)
+                    .bindPopup("<b>{{ point.name }}</b><br>{{ point.address|default:'Не указан' }}");
+            } catch (error) {
+                console.error('Ошибка при добавлении маркера:', error);
+            }
+        {% endfor %}
+    } catch (error) {
+        console.error('Ошибка инициализации карты:', error);
+    }
 {% endif %}
 </script>
 {% endblock content %}

@@ -20,6 +20,8 @@ def blog_page(request):
             'image': post.image,
             'created_at': post.created_at,
             'user': post.user,
+            'username': post.user.username,
+            'full_name': post.user.get_full_name() or post.user.username,
             'views': post.views,
             'slug': post.slug,
             'tags': [tag.strip() for tag in post.tags.split(',')] if post.tags else []

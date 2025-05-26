@@ -4,135 +4,183 @@
 {% block title %}Добавить маршрут - Ruta{% endblock title %}
 
 {% block content %}
-<div class="container mt-5 auth-container">
+<div class="container mt-5">
     <h1 class="text-center mb-4">Добавить новый маршрут</h1>
 
-    <form method="post" enctype="multipart/form-data" class="add-trip-form">
+    <!-- Отображение сообщений -->
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% else %}alert-info{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Step 1: Основная информация -->
+    {% if step == 1 %}
+    <form method="post" enctype="multipart/form-data" class="add-trip-form" id="add-trip-form">
         {% csrf_token %}
         <input type="hidden" name="step" value="{{ step }}">
-
-        <!-- Step 1: Основная информация -->
-        {% if step == 1 %}
-            <div class="card custom-card p-4 mb-5">
-                <h2 class="mb-4">Шаг 1: Основная информация</h2>
-                <div class="mb-3">
-                    <label for="title" class="form-label">Название маршрута</label>
-                    <input type="text" class="form-control" id="title" name="title" value="{{ form_data.title }}" required>
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Описание</label>
-                    <textarea class="form-control" id="description" name="description" rows="3">{{ form_data.description }}</textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="tags" class="form-label">Теги (введите через запятую)</label>
-                    <input type="text" class="form-control" id="tags" name="tags" value="{{ form_data.tags }}" placeholder="например: горы, природа, путешествие">
-                </div>
-                <div class="mb-3">
-                    <label for="image" class="form-label">Изображение</label>
-                    <input type="file" class="form-control" id="image" name="image">
-                    {% if form_data.image_path %}
-                        <small class="form-text text-muted">Загружено: {{ form_data.image_path }}</small>
-                    {% endif %}
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn custom-button">Далее</button>
-                </div>
-                <div class="step-indicator">
-                    <span class="step-number">1</span>
-                </div>
+        <div class="card custom-card p-4 mb-5">
+            <h2 class="mb-4">Шаг 1: Основная информация</h2>
+            <div class="mb-3">
+                <label for="title" class="form-label">Название маршрута</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ form_data.title }}" required>
             </div>
-        {% endif %}
-
-        <!-- Step 2: Точки маршрута с интерактивной картой -->
-        {% if step == 2 %}
-            <div class="card custom-card p-4 mb-5">
-                <h2 class="mb-4">Шаг 2: Добавьте точки маршрута</h2>
-                <div class="mb-3">
-                    <label for="point_name" class="form-label">Название точки</label>
-                    <input type="text" class="form-control" id="point_name" name="point_name">
-                </div>
-                <div class="mb-3">
-                    <label for="point_type" class="form-label">Тип точки</label>
-                    <select class="form-control" id="point_type" name="point_type">
-                        <option value="start">Начало</option>
-                        <option value="intermediate" selected>Промежуточная точка</option>
-                        <option value="end">Конец</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Выберите точку на карте</label>
-                    <div id="map" class="trip-map"></div>
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Адрес</label>
-                    <input type="text" class="form-control" id="address" name="address" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="point_description" class="form-label">Описание точки</label>
-                    <textarea class="form-control" id="point_description" name="point_description" rows="2"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="point_image" class="form-label">Изображение точки</label>
-                    <input type="file" class="form-control" id="point_image" name="point_image">
-                </div>
-                <div class="text-center mb-4">
-                    <button type="submit" class="btn custom-button" name="add_point">Добавить точку</button>
-                </div>
-
-                <!-- Список добавленных точек -->
-                {% if points %}
-                    <h3 class="mb-3">Добавленные точки:</h3>
-                    <div class="points-toggle">
-                        <ul class="list-group">
-                            {% for point in points %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ point.name }} ({{ point.point_type }}) - {{ point.address }}
-                                    <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_point" value="{{ forloop.counter0 }}">Удалить</button>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Описание</label>
+                <textarea class="form-control" id="description" name="description" rows="3">{{ form_data.description }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="tags" class="form-label">Теги (введите через запятую)</label>
+                <input type="text" class="form-control" id="tags" name="tags" value="{{ form_data.tags }}" placeholder="например: горы, природа, путешествие">
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Изображение</label>
+                <input type="file" class="form-control" id="image" name="image">
+                {% if form_data.image_path %}
+                    <small class="form-text">{{ form_data.image_path }}</small>
                 {% endif %}
-
-                <div class="text-center">
-                    <button type="submit" class="btn custom-button" name="next_step">Далее</button>
-                </div>
-                <div class="step-indicator">
-                    <span class="step-number">2</span>
-                </div>
             </div>
-        {% endif %}
-
-        <!-- Step 3: Дата и статус маршрута -->
-        {% if step == 3 %}
-            <div class="card custom-card p-4 mb-5">
-                <h2 class="mb-4">Шаг 3: Дата и статус</h2>
-                <div class="mb-3">
-                    <label for="date" class="form-label">Дата маршрута</label>
-                    <input type="date" class="form-control" id="date" name="date" value="{{ form_data.date }}" required>
-                </div>
-                <div class="mb-3">
-                    <label for="status" class="form-label">Статус маршрута</label>
-                    <select class="form-control" id="status" name="status">
-                        <option value="planned" {% if form_data.status == 'planned' %}selected{% endif %}>Запланирован</option>
-                        <option value="completed" {% if form_data.status == 'completed' %}selected{% endif %}>Пройден</option>
-                    </select>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn custom-button" name="save">Сохранить маршрут</button>
-                </div>
-                <div class="step-indicator">
-                    <span class="step-number">3</span>
-                </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Далее</button>
             </div>
-        {% endif %}
+        </div>
     </form>
+    {% endif %}
+
+    <!-- Step 2: Точки маршрута -->
+    {% if step == 2 %}
+    <!-- Форма для добавления и удаления точек -->
+    <form method="post" enctype="multipart/form-data" class="add-trip-form" id="add-trip-form">
+        {% csrf_token %}
+        <input type="hidden" name="step" value="{{ step }}">
+        <div class="card custom-card p-4 mb-5">
+            <h2 class="mb-4">Шаг 2: Добавьте точки маршрута</h2>
+            <p class="text-muted">Необходимо добавить хотя бы одну начальную и одну конечную точку маршрута.</p>
+            <div class="mb-3">
+                <label for="point_name" class="form-label">Название точки</label>
+                <input type="text" class="form-control" id="point_name" name="point_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="point_type" class="form-label">Тип точки</label>
+                <select class="form-select" id="point_type" name="point_type">
+                    <option value="start">Начало</option>
+                    <option value="intermediate" selected>Промежуточная точка</option>
+                    <option value="end">Конец</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Выберите точку на карте</label>
+                <div id="map" class="trip-map" style="height: 400px;"></div>
+                <input type="hidden" id="lat" name="lat" value="">
+                <input type="hidden" id="lng" name="lng" value="">
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Адрес</label>
+                <input type="text" class="form-control" id="address" name="address" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="point_description" class="form-label">Описание точки</label>
+                <textarea class="form-control" id="point_description" name="point_description" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="point_image" class="form-label">Изображение точки</label>
+                <input type="file" class="form-control" id="point_image" name="point_image" accept="image/*">
+            </div>
+            <div class="text-center mb-4">
+                <button type="submit" class="btn btn-primary" name="add_point">Добавить точку</button>
+            </div>
+
+            <!-- Список добавленных точек -->
+            {% if points %}
+                <h3 class="mb-3">Добавленные точки ({{ points|length }}):</h3>
+                <div class="points-toggle">
+                    <ul class="list-group">
+                        {% for point in points %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ point.name }}</strong>
+                                    <span class="badge bg-secondary ms-2">
+                                        {% if point.point_type == 'start' %}
+                                            Начало
+                                        {% elif point.point_type == 'end' %}
+                                            Конец
+                                        {% else %}
+                                            Промежуточная
+                                        {% endif %}
+                                    </span>
+                                    <br>
+                                    <small class="text-muted">{{ point.address|default:'Адрес не указан' }}</small>
+                                    {% if point.description %}
+                                        <br><small>{{ point.description }}</small>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_point" value="{{ forloop.counter0 }}">Удалить</button>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <strong>Точки не добавлены.</strong> Добавьте хотя бы одну начальную и одну конечную точку маршрута.
+                </div>
+            {% endif %}
+        </div>
+    </form>
+
+    <!-- Отдельные формы для переходов -->
+    <div class="text-center mt-4">
+        <form method="post" class="d-inline">
+            {% csrf_token %}
+            <input type="hidden" name="step" value="{{ step }}">
+            <input type="hidden" name="prev_step" value="prev_step">
+            <button type="submit" class="btn btn-outline-secondary me-2">Назад</button>
+        </form>
+        <form method="post" class="d-inline">
+            {% csrf_token %}
+            <input type="hidden" name="step" value="{{ step }}">
+            <input type="hidden" name="next_step" value="next_step">
+            <button type="submit" class="btn btn-primary">Далее</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Step 3: Дата и публичность -->
+    {% if step == 3 %}
+    <form method="post" enctype="multipart/form-data" class="add-trip-form" id="add-trip-form">
+        {% csrf_token %}
+        <input type="hidden" name="step" value="{{ step }}">
+        <div class="card custom-card p-4 mb-5">
+            <h2 class="mb-4">Шаг 3: Дата и публичность</h2>
+            <div class="mb-3">
+                <label for="date" class="form-label">Дата маршрута</label>
+                <input type="date" class="form-control" id="date" name="date" value="{{ form_data.date|default:today }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="is_public" class="form-label">Публичность маршрута</label>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="is_public" name="is_public" {% if form_data.is_public|default:True %}checked{% endif %}>
+                    <label class="form-check-label" for="is_public">Сделать маршрут публичным (видно всем пользователям)</label>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-outline-secondary me-2" name="prev_step">Назад</button>
+                <button type="submit" class="btn btn-primary" name="save">Сохранить маршрут</button>
+            </div>
+        </div>
+    </form>
+    {% endif %}
 </div>
 
 <!-- Подключение Leaflet -->
+{% block extra_head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
 {% if step == 2 %}
     // Инициализация карты
@@ -151,10 +199,17 @@
             .then(data => {
                 if (data && data.display_name) {
                     document.getElementById('address').value = data.display_name;
-                    document.getElementById('point_name').value = data.address.road || data.address.suburb || data.address.city || data.display_name.split(',')[0];
+                    if (!document.getElementById('point_name').value) {
+                        document.getElementById('point_name').value = data.address.road || data.address.suburb || data.address.city || data.display_name.split(',')[0];
+                    }
+                } else {
+                    document.getElementById('address').value = 'Адрес не найден';
                 }
             })
-            .catch(error => console.error('Ошибка геокодирования:', error));
+            .catch(error => {
+                console.error('Ошибка геокодирования:', error);
+                document.getElementById('address').value = 'Ошибка получения адреса';
+            });
     }
 
     // Обработчик клика по карте
@@ -162,35 +217,39 @@
         var lat = e.latlng.lat;
         var lng = e.latlng.lng;
 
-        // Удаляем предыдущий маркер, если он есть
         if (marker) {
             map.removeLayer(marker);
         }
 
-        // Добавляем новый маркер
         marker = L.marker([lat, lng]).addTo(map)
             .bindPopup(`Выбрано: [${lat.toFixed(6)}, ${lng.toFixed(6)}]`)
             .openPopup();
 
-        // Заполняем скрытые поля с координатами
         document.getElementById('lat').value = lat.toFixed(6);
         document.getElementById('lng').value = lng.toFixed(6);
 
-        // Выполняем геокодирование для получения адреса
         reverseGeocode(lat, lng);
     });
 
-    // Скрытые поля для координат
-    var latInput = document.createElement('input');
-    latInput.type = 'hidden';
-    latInput.name = 'lat';
-    latInput.id = 'lat';
-    var lngInput = document.createElement('input');
-    lngInput.type = 'hidden';
-    lngInput.name = 'lng';
-    lngInput.id = 'lng';
-    document.querySelector('.add-trip-form').appendChild(latInput);
-    document.querySelector('.add-trip-form').appendChild(lngInput);
+    // Очистка формы после добавления точки
+    document.getElementById('add-trip-form').addEventListener('submit', function(e) {
+        if (e.submitter && e.submitter.name === 'add_point') {
+            setTimeout(() => {
+                document.getElementById('point_name').value = '';
+                document.getElementById('address').value = '';
+                document.getElementById('point_description').value = '';
+                document.getElementById('point_image').value = '';
+                document.getElementById('lat').value = '';
+                document.getElementById('lng').value = '';
+                document.getElementById('point_type').value = 'intermediate';
+                if (marker) {
+                    map.removeLayer(marker);
+                    marker = null;
+                }
+            }, 100);
+        }
+    });
 {% endif %}
 </script>
+{% endblock extra_head %}
 {% endblock content %}

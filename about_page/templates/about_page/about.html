@@ -36,20 +36,13 @@
             <h1 class="hero-title">Ваш маршрут — ваш шедевр.<br>Мы поможем его создать.</h1>
             <p class="hero-subtitle">Откройте для себя удивительные места</p>
 
-            <form class="search-form" method="GET" action="{% url 'trips:popular_routes' %}">
-                <div class="row g-2 align-items-center justify-content-center">
-                    <div class="col-auto">
-                        <div class="search-input-container d-flex align-items-center gap-2">
-                            <input type="text" class="form-control" placeholder="Откуда" name="from">
-                            <input type="text" class="form-control" placeholder="Куда" name="to">
-                            <input type="date" class="form-control" name="date">
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn custom-button">Найти маршрут</button>
-                    </div>
-                </div>
-            </form>
+            <div class="mt-4">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'trips:add_trip' %}" class="btn btn-primary btn-lg custom-button create-route-button">Создать маршрут</a>
+                {% else %}
+                    <a href="{% url 'auth_pages:login' %}?next={% url 'trips:add_trip' %}" class="btn btn-primary btn-lg custom-button create-route-button">Создать маршрут</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </section>

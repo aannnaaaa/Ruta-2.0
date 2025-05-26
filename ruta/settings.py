@@ -43,6 +43,12 @@ DEFAULT_FROM_EMAIL = 'your-email@example.com'
 LOGIN_REDIRECT_URL = 'profiles:profile'
 # Application definition
 
+LANGUAGE_CODE = 'ru-ru'
+TIME_ZONE = 'Europe/Moscow'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
