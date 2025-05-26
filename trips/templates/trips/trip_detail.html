@@ -1,0 +1,100 @@
+{% extends "base_layout.html" %}
+{% load static %}
+
+{% block title %}{{ trip.title }} | Ruta{% endblock title %}
+
+{% block content %}
+<div class="container mt-5 trip-detail-container">
+    <div class="card trip-detail-card">
+        <div class="card-body">
+            <small class="text-muted mb-3 d-block">{{ trip.created_at|date:"d февраля Y года" }}</small>
+            <h1 class="card-title">{{ trip.title }}</h1>
+            <p class="mb-3">
+                <strong>Автор:</strong>
+                <a href="{% url 'profiles:profile' username=trip.user.username %}" class="custom-link">{{ trip.user.get_full_name|default:trip.user.username }}</a>
+            </p>
+            <img src="{% if trip.image %}{{ trip.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" class="img-fluid rounded mb-4" alt="{{ trip.title }}">
+            <div class="post-tags mb-4">
+                <strong>Теги:</strong>
+                {% if tags %}
+                    {% for tag in tags %}
+                        <span class="badge bg-secondary">{{ tag }}</span>
+                    {% endfor %}
+                {% else %}
+                    Нет тегов
+                {% endif %}
+            </div>
+            <div class="post-content">
+                {{ trip.description|linebreaks }}
+            </div>
+            <h3 class="mt-4">Карта маршрута</h3>
+            <div id="trip-map" class="trip-detail-map"></div>
+            <h3 class="mt-4">Точки маршрута</h3>
+            <div class="accordion trip-point-accordion" id="tripPointsAccordion">
+                {% for point in points %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}">
+                                {{ point.name }} ({{ point.get_point_type_display }})
+                            </button>
+                        </h2>
+                        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#tripPointsAccordion">
+                            <div class="accordion-body">
+                                <p><strong>Адрес:</strong> {{ point.address|default:"Не указан" }}</p>
+                                <p><strong>Описание:</strong> {{ point.description|default:"Не указано" }}</p>
+                                {% if point.image %}
+                                    <img src="{{ point.image.url }}" class="img-fluid rounded mt-2" alt="{{ point.name }}">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Точек пока нет</p>
+                {% endfor %}
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <a href="{% url 'trips:popular_routes' %}" class="btn btn-outline-secondary">Назад к маршрутам</a>
+                    <a href="#" class="btn custom-button" onclick="exportRoute('{{ trip.slug }}')">Экспортировать</a>
+                </div>
+                {% if request.user == trip.user %}
+                    <div>
+                        <a href="{% url 'trips:edit_trip' trip.slug %}" class="btn custom-button">Редактировать</a>
+                        <a href="{% url 'trips:delete_trip' trip.slug %}" class="btn btn-outline-danger" onclick="return confirm('Вы уверены, что хотите удалить маршрут?')">Удалить</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Подключение Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var map = L.map('trip-map').setView([55.7558, 37.6173], 10); // Центр Москвы
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        {% for point in points %}
+            L.marker([{{ point.latitude|default:"55.7558" }}, {{ point.longitude|default:"37.6173" }}])
+                .addTo(map)
+                .bindPopup("<b>{{ point.name }}</b><br>{{ point.address|default:'Не указан' }}")
+                .openPopup();
+        {% endfor %}
+
+        // Центрирование карты по точкам
+        if ({{ points|length }} > 0) {
+            var group = new L.featureGroup([{% for point in points %}L.latLng({{ point.latitude|default:"55.7558" }}, {{ point.longitude|default:"37.6173" }}){% if not forloop.last %},{% endif %}{% endfor %}]);
+            map.fitBounds(group.getBounds(), {padding: [50, 50]});
+        }
+
+        function exportRoute(slug) {
+            alert('Функция экспорта маршрута в разработке. Скоро будет доступна!');
+        }
+    });
+</script>
+{% endblock content %}

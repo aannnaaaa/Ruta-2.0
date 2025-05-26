@@ -1,0 +1,50 @@
+{% extends "base_layout.html" %}
+{% load static %}
+{% block title %}Вход | Ruta{% endblock title %}
+{% block content %}
+<div class="container mt-5 position-relative auth-container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card p-4 p-md-5 custom-card">
+                <h1 class="text-center mb-4">Рады видеть Вас снова!</h1>
+                {% if messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <form method="post" action="{% url 'auth_pages:login' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Адрес электронной почты</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Введите эл. почту" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль" required>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'auth_pages:forgot_password' %}" class="custom-link">Забыли пароль? Восстановить</a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary custom-button">Вход</button>
+                    </div>
+                </form>
+                <p class="text-center mt-4 line-decorated">Ещё не зарегистрированы?</p>
+                <p class="text-center mt-3">
+                    <a href="{% url 'auth_pages:registration' %}" class="custom-link">Присоединяйтесь,</a> чтобы использовать все возможности RUTA
+                </p>
+                <p class="text-center small-text mt-2">
+                    Продолжая, Вы соглашаетесь с нашим <a href="#" class="custom-link-small">Условиями использования</a> и подтверждаете, что прочли наше
+                    <a href="#" class="custom-link-small">Положение о конфиденциальности и использовании файлов cookie.</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <img src="{% static 'images/balloon_dark.svg' %}" class="balloon balloon-1" alt="Balloon">
+    <img src="{% static 'images/balloon_light.svg' %}" class="balloon balloon-2" alt="Balloon">
+    <img src="{% static 'images/balloon_dark.svg' %}" class="balloon balloon-3" alt="Balloon">
+    <img src="{% static 'images/balloon_light.svg' %}" class="balloon balloon-4" alt="Balloon">
+</div>
+{% endblock content %}

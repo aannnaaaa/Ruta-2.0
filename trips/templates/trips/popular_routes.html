@@ -1,0 +1,47 @@
+{% extends "base_layout.html" %}
+{% load static %}
+
+{% block title %}Популярные маршруты | Ruta{% endblock title %}
+
+{% block content %}
+<div class="container mt-5 popular-routes-container">
+    <h1 class="section-title">Популярные маршруты</h1>
+    <form method="get" action="" class="mb-4 popular-routes-filter">
+        <input type="text" name="q" class="form-control" placeholder="Поиск по маршрутам..." value="{{ query }}">
+        <select name="status" class="form-select">
+            <option value="">Все статусы</option>
+            <option value="planned" {% if request.GET.status == 'planned' %}selected{% endif %}>Запланировано</option>
+            <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Посещено</option>
+        </select>
+        <button type="submit" class="btn custom-button">Фильтровать</button>
+    </form>
+    <div class="row">
+        {% for trip in trips %}
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card route-card">
+                    <img src="{% if trip.image %}{{ trip.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" class="card-img-top" alt="{{ trip.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ trip.title }}</h5>
+                        <p class="card-text">{{ trip.description|truncatechars:100 }}</p>
+                        <p class="card-text">
+                            <strong>Теги:</strong>
+                            {% if trip.tags %}
+                                {% for tag in trip.tags %}
+                                    <span class="badge bg-secondary">{{ tag }}</span>
+                                {% endfor %}
+                            {% else %}
+                                Нет тегов
+                            {% endif %}
+                        </p>
+                        <p class="card-text">Дата: {{ trip.date|date:"d.m.Y" }}</p>
+                        <p class="card-text">Статус: {{ trip.status }}</p>
+                        <a href="{% url 'trips:trip_detail' trip.slug %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Нет доступных маршрутов.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

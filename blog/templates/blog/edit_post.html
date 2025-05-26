@@ -1,0 +1,35 @@
+{% extends "base_layout.html" %}
+{% load static %}
+{% block title %}Редактировать пост | Ruta{% endblock title %}
+{% block content %}
+<div class="container mt-5 position-relative auth-container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card p-4 p-md-5 custom-card">
+                <h1 class="text-center mb-4">Редактировать пост</h1>
+                {% if messages %}
+                    <div class="alert alert-success" role="alert">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="text-center">
+                        <button type="submit" class="btn custom-button">Сохранить</button>
+                    </div>
+                </form>
+                <p class="text-center mt-4">
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="custom-link">Назад к посту</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <img src="{% static 'images/balloon_dark.svg' %}" class="balloon balloon-1" alt="Balloon">
+    <img src="{% static 'images/balloon_light.svg' %}" class="balloon balloon-2" alt="Balloon">
+    <img src="{% static 'images/balloon_dark.svg' %}" class="balloon balloon-3" alt="Balloon">
+    <img src="{% static 'images/balloon_light.svg' %}" class="balloon balloon-4" alt="Balloon">
+</div>
+{% endblock content %}

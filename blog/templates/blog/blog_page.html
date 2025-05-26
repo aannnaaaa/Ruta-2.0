@@ -1,0 +1,65 @@
+{% extends "base_layout.html" %}
+{% load static %}
+
+{% block title %}Блог | Ruta{% endblock title %}
+
+{% block content %}
+<div class="container blog-section py-5">
+    <h1 class="section-title">Наш блог</h1>
+    <div class="row">
+        {% for post in posts %}
+            {% if forloop.first %}
+                <div class="col-12 mb-4">
+                    <div class="card main-blog-card">
+                        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/default-blog.jpg' %}{% endif %}" class="blog-image" alt="{{ post.title }}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <a href="{% url 'blog:post_detail' post.slug %}" class="btn custom-button">Узнать больше</a>
+                                <small class="text-muted">{{ post.created_at|date:"d февраля Y года" }}</small>
+                            </div>
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.description|truncatechars:150 }}</p>
+                            <p class="card-text">
+                                <strong>Теги:</strong>
+                                {% if post.tags %}
+                                    {% for tag in post.tags %}
+                                        <span class="badge bg-secondary">{{ tag }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    Нет тегов
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="card blog-card">
+                        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/default-blog.jpg' %}{% endif %}" class="blog-image" alt="{{ post.title }}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <a href="{% if post.slug %}{% url 'blog:post_detail' post.slug %}{% else %}#{% endif %}" class="btn custom-button">Узнать больше</a>
+                                <small class="text-muted">{{ post.created_at|date:"d февраля Y года" }}</small>
+                            </div>
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.description|truncatechars:150 }}</p>
+                            <p class="card-text">
+                                <strong>Теги:</strong>
+                                {% if post.tags %}
+                                    {% for tag in post.tags %}
+                                        <span class="badge bg-secondary">{{ tag }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    Нет тегов
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>Нет доступных постов.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

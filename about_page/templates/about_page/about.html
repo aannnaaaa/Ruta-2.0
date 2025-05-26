@@ -1,0 +1,150 @@
+{% extends "base_layout.html" %}
+{% load static %}
+
+{% block title %}О сервисе - Ruta{% endblock title %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-decorations">
+        <!-- Первый ряд -->
+        <div class="travel-icon airplane" title="Полетели!">✈️</div>
+        <div class="travel-icon hot-air-balloon" title="Воздушные приключения">🎈</div>
+        <div class="travel-icon ship" title="Морские путешествия">🚢</div>
+
+        <!-- Второй ряд -->
+        <div class="travel-icon compass" title="Найдем направление">🧭</div>
+        <div class="travel-icon-wrapper compass">
+            <div class="compass"></div>
+        </div>
+        <div class="travel-icon suitcase" title="Собираем чемоданы">🧳</div>
+        <div class="travel-icon train" title="Железнодорожные маршруты">🚂</div>
+
+        <!-- Третий ряд -->
+        <div class="travel-icon camera" title="Запечатлим моменты">📷</div>
+        <div class="travel-icon mountain" title="Покорим вершины">🏔️</div>
+        <div class="travel-icon palm-tree" title="Тропический отдых">🌴</div>
+
+        <!-- Дополнительные элементы -->
+        <div class="travel-icon globe" title="Весь мир открыт">🌍</div>
+        <div class="travel-icon tent" title="Кемпинг под звездами">⛺</div>
+        <div class="travel-icon map" title="Изучаем карты">🗺️</div>
+        <div class="travel-icon glasses" title="Изучаем карты">🕶️</div>
+    </div>
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Ваш маршрут — ваш шедевр.<br>Мы поможем его создать.</h1>
+            <p class="hero-subtitle">Откройте для себя удивительные места</p>
+
+            <form class="search-form" method="GET" action="{% url 'trips:popular_routes' %}">
+                <div class="row g-2 align-items-center justify-content-center">
+                    <div class="col-auto">
+                        <div class="search-input-container d-flex align-items-center gap-2">
+                            <input type="text" class="form-control" placeholder="Откуда" name="from">
+                            <input type="text" class="form-control" placeholder="Куда" name="to">
+                            <input type="date" class="form-control" name="date">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn custom-button">Найти маршрут</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="section why-choose-section">
+    <div class="container">
+        <h2 class="section-title">Почему выбирают нас</h2>
+        <div class="why-choose-text">
+            <p>Мы — ваш надежный помощник в мире путешествий, созданный для того, чтобы вдохновлять вас на новые открытия. Наш сервис объединяет лучшие маршруты и рекомендации, чтобы каждое путешествие становилось незабываемым приключением. Позвольте нам показать вам, сколько удивительных мест существует на нашей прекрасной планете.</p>
+        </div>
+        <div class="text-center">
+            <a href="{% url 'about_page:about' %}" class="btn custom-button">Подробнее</a>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Routes Section -->
+<section class="section popular-routes-section">
+    <div class="container">
+        <h2 class="section-title">Последние добавленные маршруты</h2>
+        <div class="row g-4">
+            {% for trip in trips %}
+                <div class="col-lg-4 col-md-6">
+                    <a href="{% url 'trips:trip_detail' trip.slug %}" class="stretched-link">
+                        <div class="card trip-card">
+                            <img src="{% if trip.image %}{{ trip.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" alt="{{ trip.title }}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ trip.title }}</h5>
+                                <p class="card-text">{{ trip.description|truncatechars:100 }}</p>
+                                <p class="card-text"><small class="text-muted">{{ trip.date }} | {{ trip.get_status_display }}</small></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>Нет доступных маршрутов</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'trips:popular_routes' %}" class="btn custom-button">Посмотреть все маршруты</a>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Section -->
+<section class="section blog-section">
+    <div class="container">
+        <h2 class="section-title">Делись впечатлениями в блоге</h2>
+        <div class="row g-4">
+            {% for post in posts|slice:":3" %}
+                {% if forloop.first %}
+                    <div class="col-lg-6">
+                        <a href="{% url 'blog:post_detail' post.slug %}" class="stretched-link">
+                            <div class="blog-card main-blog-card">
+                                <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" alt="{{ post.title }}" class="blog-image">
+                                <div class="blog-content">
+                                    <h3 class="blog-title">{{ post.title }}</h3>
+                                    <p class="blog-excerpt">{{ post.description|truncatechars:150 }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-6 d-flex flex-column">
+                {% else %}
+                        <a href="{% url 'blog:post_detail' post.slug %}" class="stretched-link">
+                            <div class="blog-card flex-fill">
+                                <div class="row g-0">
+                                    <div class="col-4">
+                                        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" alt="{{ post.title }}" class="blog-image">
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="blog-content">
+                                            <h4 class="blog-title">{{ post.title }}</h4>
+                                            <p class="blog-excerpt">{{ post.description|truncatechars:100 }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                {% endif %}
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>Нет публикаций</p>
+                </div>
+            {% endfor %}
+            {% if posts|length > 1 %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="text-center mt-3">
+            <a href="{% url 'blog:blog' %}" class="btn custom-button">Посмотреть все посты</a>
+        </div>
+    </div>
+</section>
+{% endblock content %}
