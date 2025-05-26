@@ -63,7 +63,7 @@
 <!-- Popular Routes Section -->
 <section class="section popular-routes-section">
     <div class="container">
-        <h2 class="section-title">Последние добавленные маршруты</h2>
+        <h2 class="section-title">Популярные маршруты</h2>
         <div class="row g-4">
             {% for trip in trips %}
                 <div class="col-lg-4 col-md-6">
@@ -91,52 +91,34 @@
 </section>
 
 <!-- Blog Section -->
+<!-- Blog Section -->
 <section class="section blog-section">
     <div class="container">
         <h2 class="section-title">Делись впечатлениями в блоге</h2>
         <div class="row g-4">
             {% for post in posts|slice:":3" %}
-                {% if forloop.first %}
-                    <div class="col-lg-6">
-                        <a href="{% url 'blog:post_detail' post.slug %}" class="stretched-link">
-                            <div class="blog-card main-blog-card">
-                                <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" alt="{{ post.title }}" class="blog-image">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="stretched-link">
+                        <div class="blog-card">
+                            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" alt="{{ post.title }}" class="blog-image">
+                            <div class="blog-overlay">
                                 <div class="blog-content">
                                     <h3 class="blog-title">{{ post.title }}</h3>
-                                    <p class="blog-excerpt">{{ post.description|truncatechars:150 }}</p>
+                                    <p class="blog-excerpt">{{ post.description|truncatechars:60 }}</p>
+                                    <p class="blog-date text-muted"><small>{{ post.date|date:"d.m.Y" }}</small></p>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-6 d-flex flex-column">
-                {% else %}
-                        <a href="{% url 'blog:post_detail' post.slug %}" class="stretched-link">
-                            <div class="blog-card flex-fill">
-                                <div class="row g-0">
-                                    <div class="col-4">
-                                        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/background.png' %}{% endif %}" alt="{{ post.title }}" class="blog-image">
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="blog-content">
-                                            <h4 class="blog-title">{{ post.title }}</h4>
-                                            <p class="blog-excerpt">{{ post.description|truncatechars:100 }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                {% endif %}
+                        </div>
+                    </a>
+                </div>
             {% empty %}
                 <div class="col-12 text-center">
                     <p>Нет публикаций</p>
                 </div>
             {% endfor %}
-            {% if posts|length > 1 %}
-                </div>
-            {% endif %}
         </div>
-        <div class="text-center mt-3">
-            <a href="{% url 'blog:blog' %}" class="btn custom-button">Посмотреть все посты</a>
+        <div class="text-center mt-4">
+            <a href="{% url 'blog:blog' %}" class="btn btn-primary custom-button">Посмотреть все посты</a>
         </div>
     </div>
 </section>

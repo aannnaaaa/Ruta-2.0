@@ -62,9 +62,15 @@
 
     <footer class="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <img src="{% static 'images/logo.svg' %}" alt="Ruta Logo" class="footer-logo">
+            <div class="row align-items-start">
+                <!-- Логотип слева -->
+                <div class="col-md-4 col-12 mb-4 mb-md-0">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'images/logo.svg' %}" alt="Ruta Logo" class="footer-logo">
+                    </a>
+                </div>
+                <!-- Ссылки на страницы, выровнены слева в столбец -->
+                <div class="col-md-4 col-12 mb-4 mb-md-0">
                     <ul class="footer-links">
                         <li><a href="{% url 'about_page:about' %}">О сервисе</a></li>
                         <li>
@@ -83,7 +89,8 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-4 mb-4 mb-md-0 text-md-end">
+                <!-- Контактная информация справа -->
+                <div class="col-md-4 col-12 mb-4 mb-md-0 text-md-end text-center">
                     <h5>Свяжитесь с нами:</h5>
                     <div class="footer-contacts">
                         <p>Email: <a href="mailto:info@ruta.com">info@ruta.com</a></p>

@@ -372,36 +372,56 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 
 .btn-primary {
     border-radius: 10px !important;
-    background-color: #2d7f6b;
+    background: linear-gradient(45deg, #379f86, #4dae97);
     border: none;
     color: white !important;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     padding: 12px 24px;
     text-align: center;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     text-decoration: none !important;
     line-height: 1.5;
+    min-width: 120px;
 }
 
 .btn-primary:hover {
-    background-color: #1f5c4f;
+    background: linear-gradient(45deg, #2d7f6b, #3c8e7e);
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .btn-outline-secondary {
     border-radius: 10px !important;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     padding: 12px 24px;
+}
+
+.btn-sm.btn-primary,
+.btn-sm.btn-secondary {
+    background: linear-gradient(45deg, #379f86, #4dae97);
+    border: none;
+    color: white !important;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.btn-sm.btn-primary:hover,
+.btn-sm.btn-secondary:hover {
+    background: linear-gradient(45deg, #2d7f6b, #3c8e7e);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .custom-button {
     border-radius: 10px !important;
-    background-color: #2d7f6b !important;
+    background: linear-gradient(45deg, #379f86, #4dae97) !important;
     border: none !important;
     color: white !important;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     padding: 12px 24px;
     text-align: center;
     cursor: pointer;
@@ -414,49 +434,71 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 }
 
 .custom-button:hover {
-    background-color: #1f5c4f !important;
+    background: linear-gradient(45deg, #2d7f6b, #3c8e7e) !important;
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     text-decoration: none !important;
 }
 
+.btn-add-trip, .btn-add-post {
+    background: linear-gradient(45deg, #379f86, #4dae97);
+    border: none;
+    color: white !important;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 20px auto;
+    min-width: 120px;
+}
+
+.btn-add-trip:hover, .btn-add-post:hover {
+    background: linear-gradient(45deg, #2d7f6b, #3c8e7e);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(55, 159, 134, 0.4);
+}
+
 /* Адаптивные стили для кнопок */
 @media (max-width: 768px) {
-    .custom-button {
-        padding: 12px 20px;
-        font-size: 0.95rem;
+ständ    .custom-button, .btn-primary, .btn-sm.btn-primary, .btn-sm.btn-secondary, .btn-add-trip, .btn-add-post {
+        padding: 10px 20px;
+        font-size: 0.9rem;
         min-width: 100px;
     }
 }
 
 @media (max-width: 576px) {
-    .custom-button {
-        padding: 10px 20px;
-        font-size: 0.9rem;
+    .custom-button, .btn-primary, .btn-sm.btn-primary, .btn-sm.btn-secondary, .btn-add-trip, .btn-add-post {
+        padding: 8px 16px;
+        font-size: 0.85rem;
         min-width: 90px;
     }
 }
 
 /* Увеличенные кнопки в форме поиска на главной странице */
 .search-input-container .custom-button {
-    padding: 14px 28px;
-    font-size: 1rem;
-    min-width: 140px;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    min-width: 120px;
 }
 
 /* Увеличенные кнопки в карточках маршрутов на главной странице */
 .route-card .btn-primary {
     padding: 12px 24px;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    min-width: 120px;
 }
 
 /* Ссылки */
+.text-muted {
+    color: #6c757d !important; /* Серый цвет */
+}
 .custom-link {
-    color: white;
+    color: gray;
     text-decoration: none;
     font-size: 1rem;
 }
-
 .custom-link:hover {
     color: #d0d8c5;
     text-decoration: none;
@@ -566,6 +608,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 /* Профиль */
 .profile-sections {
     margin-top: 40px;
+    margin-bottom: 60px; /* Отступ перед футером */
     padding: 20px;
     background: linear-gradient(135deg, #f4f7f6 0%, #e0f2f1 100%);
     border-radius: 15px;
@@ -663,17 +706,18 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     margin-top: 20px;
 }
 
-.btn-custom-edit {
+.btn-custom {
     background: linear-gradient(45deg, #379f86, #4dae97);
     border: none;
-    color: #fff;
+    color: white !important;
     padding: 12px 24px;
     border-radius: 10px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
+    min-width: 120px;
 }
 
-.btn-custom-edit:hover {
+.btn-custom:hover {
     background: linear-gradient(45deg, #2d7f6b, #3c8e7e);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(55, 159, 134, 0.4);
@@ -689,18 +733,6 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     margin-bottom: 30px;
     position: relative;
     overflow: hidden;
-}
-
-.profile-stats::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(55, 159, 134, 0.1) 0%, transparent 70%);
-    animation: rotate 10s linear infinite;
-    z-index: 0;
 }
 
 .profile-stats .stat-item {
@@ -740,20 +772,19 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 .tab-button {
     background: none;
     border: none;
-    padding: 10px 20px;
-    font-size: 18px;
+    padding: 12px 24px;
+    font-size: 0.95rem;
     color: #7f8c8d;
     cursor: pointer;
     transition: all 0.3s ease;
-    border-radius: 5px;
+    border-radius: 10px;
     margin: 0 5px;
 }
 
 .tab-button.active {
     color: #2c3e50;
     font-weight: 700;
-    background: linear-gradient(90deg, #e0f2f1, #ffffff);
-    border-bottom: 2px solid #379f86;
+    background: #e0f2f1;
 }
 
 .tab-content {
@@ -789,25 +820,6 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 
 .trip-card:hover .card-img-top, .blog-card:hover .card-img-top {
     transform: scale(1.05);
-}
-
-.btn-add-trip, .btn-add-post {
-    background: linear-gradient(45deg, #379f86, #4dae97);
-    border: none;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    display: block;
-    margin: 20px auto;
-    max-width: 250px;
-}
-
-.btn-add-trip:hover, .btn-add-post:hover {
-    background: linear-gradient(45deg, #2d7f6b, #3c8e7e);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(55, 159, 134, 0.4);
 }
 
 /* Адаптивность */
@@ -846,6 +858,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     }
     .profile-sections {
         margin-top: 30px;
+        margin-bottom: 40px;
         padding: 15px;
     }
     .profile-header-content {
@@ -890,13 +903,14 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 
 @media (max-width: 576px) {
     .search-input-container .custom-button {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-        min-width: 100px;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        min-width: 90px;
     }
     .route-card .btn-primary {
         padding: 8px 16px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        min-width: 90px;
     }
     .add-trip-container h1 {
         font-size: 2rem;
@@ -909,6 +923,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     }
     .profile-sections {
         margin-top: 20px;
+        margin-bottom: 30px;
         padding: 10px;
     }
     .profile-name {
@@ -922,7 +937,9 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     }
     .btn-add-trip, .btn-add-post {
         max-width: 200px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        min-width: 90px;
     }
 }
 
@@ -1190,8 +1207,8 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
         width: 100%;
         min-width: unset;
         margin-top: 10px;
-        font-size: 1rem;
-        padding: 12px 20px;
+        font-size: 0.95rem;
+        padding: 10px 20px;
         min-height: 45px;
     }
     .add-trip-container {
@@ -1233,13 +1250,14 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 
 @media (max-width: 576px) {
     .search-input-container .custom-button {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-        min-width: 100px;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        min-width: 90px;
     }
     .route-card .btn-primary {
         padding: 8px 16px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        min-width: 90px;
     }
     .add-trip-container h1 {
         font-size: 2rem;
@@ -1322,102 +1340,286 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     font-size: 0.95rem;
 }
 
-.blog-section {
-    background: #f8f9fa;
+/* Стили для формы поиска на странице блога */
+.blog-section .search-form {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    width: 100%;
 }
 
-.blog-card {
+.blog-section .popular-routes-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.blog-section .popular-routes-filter .input-group {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.blog-section .popular-routes-filter .form-control {
+    border-radius: 10px 0 0 10px;
+    padding: 10px 15px;
+    border: 1px solid #2d7f6b;
+    font-size: 1rem;
+    flex: 1;
+    min-width: 0;
+    border-right: none;
+}
+
+.blog-section .popular-routes-filter .form-control:focus {
+    border-color: #1f5c4f;
+    box-shadow: 0 0 5px rgba(45, 127, 107, 0.5);
+    outline: none;
+}
+
+.blog-section .popular-routes-filter .form-control::placeholder {
+    color: #6c757d;
+}
+
+.blog-section .popular-routes-filter .form-select {
+    border-radius: 0;
+    padding: 10px;
+    border: 1px solid #2d7f6b;
+    font-size: 1rem;
+    border-left: none;
+    border-right: none;
+}
+
+.blog-section .popular-routes-filter .form-select:focus {
+    border-color: #1f5c4f;
+    box-shadow: 0 0 5px rgba(45, 127, 107, 0.5);
+    outline: none;
+}
+
+.blog-section .popular-routes-filter .btn-primary {
+    border-radius: 0 10px 10px 0;
+    background: linear-gradient(45deg, #379f86, #4dae97);
+    border: 1px solid #2d7f6b;
+    border-left: none;
+    color: white;
+    font-size: 0.95rem;
+    padding: 12px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    width: 120px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.blog-section .popular-routes-filter .btn-primary:hover {
+    background: linear-gradient(45deg, #2d7f6b, #3c8e7e);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Отступ перед заголовком страницы блога */
+.blog-section .page-header {
+    padding-top: 40px;
+}
+
+/* Адаптивность для формы поиска */
+@media (max-width: 768px) {
+    .blog-section .popular-routes-filter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .blog-section .popular-routes-filter .input-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    .blog-section .popular-routes-filter .form-control {
+        width: 100%;
+        border-radius: 10px;
+        border-right: 1px solid #2d7f6b;
+        margin-bottom: 10px;
+    }
+    .blog-section .popular-routes-filter .form-select {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #2d7f6b;
+        margin-bottom: 10px;
+    }
+    .blog-section .popular-routes-filter .btn-primary {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #2d7f6b;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .blog-section .popular-routes-filter .form-control {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+        min-height: 40px;
+    }
+    .blog-section .popular-routes-filter .form-select {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+        min-height: 40px;
+    }
+    .blog-section .popular-routes-filter .btn-primary {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        min-height: 40px;
+    }
+    .blog-section .page-header {
+        padding-top: 30px;
+    }
+}card {
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-    background: white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
-    z-index: 1;
+    height: 300px; /* Компактная высота */
+    background: #e0f2f1; /* Фон в стиле карточек маршрутов */
 }
 
 .blog-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
-
-.main-blog-card {
-    height: 730px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.blog-card:not(.main-blog-card) {
-    margin-bottom: 30px;
-    height: 350px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
 .blog-image {
-    object-fit: cover;
+    height: 100%;
     width: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.main-blog-card .blog-image {
-    height: 400px;
+.blog-card:hover .blog-image {
+    transform: scale(1.05);
 }
 
-.blog-card:not(.main-blog-card) .blog-image {
-    height: 200px;
+.blog-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(55, 159, 134, 0.8), transparent); /* Градиент с фирменным цветом */
+    padding: 15px;
+    height: 70%; /* Подложка покрывает нижнюю часть */
+    display: flex;
+    align-items: flex-end;
 }
 
 .blog-content {
-    padding: 25px;
+    color: white;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
 }
 
 .blog-title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    color: #2C3E50;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     line-height: 1.4;
-}
-
-.blog-excerpt {
-    color: #666;
-    font-size: 0.95rem;
-    line-height: 1.6;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
 }
 
-.main-blog-card .blog-excerpt {
-    -webkit-line-clamp: 5;
+.blog-excerpt {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    margin-bottom: 8px;
 }
 
-.blog-card:not(.main-blog-card) .blog-excerpt {
-    -webkit-line-clamp: 3;
+.blog-date {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    color: #d0d8c5; /* Светлый оттенок для даты */
 }
 
+.blog-card .btn-primary {
+    background: linear-gradient(45deg, #379f86, #4dae97);
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    min-width: 80px;
+    align-self: flex-start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-card .btn-primary:hover {
+    background: linear-gradient(45deg, #2d7f6b, #3c8e7e);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(55, 159, 134, 0.4);
+}
+
+.blog-card::after {
+    content: '➔';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.blog-card:hover::after {
+    opacity: 1;
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
-    .main-blog-card {
-        height: 620px;
+    .blog-card {
+        height: 260px;
     }
-    .main-blog-card .blog-image {
-        height: 300px;
+    .blog-title {
+        font-size: 1rem;
     }
-    .blog-card:not(.main-blog-card) {
-        margin-bottom: 20px;
-        height: 300px;
+    .blog-excerpt {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 1;
     }
-    .blog-card:not(.main-blog-card) .blog-image {
-        height: 150px;
+    .blog-date {
+        font-size: 0.75rem;
+    }
+    .blog-card .btn-primary {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        min-width: 70px;
     }
 }
 
+@media (max-width: 576px) {
+    .blog-card {
+        height: 240px;
+    }
+    .blog-title {
+        font-size: 0.95rem;
+    }
+    .blog-excerpt {
+        font-size: 0.75rem;
+        -webkit-line-clamp: 1;
+    }
+    .blog-date {
+        font-size: 0.7rem;
+    }
+    .blog-card .btn-primary {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+        min-width: 60px;
+    }
+}
+/* Футер */
 .footer {
     background-color: #379F86;
     color: white;
@@ -1445,7 +1647,8 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 .footer-links a {
     color: white;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 .footer-links a:hover {
@@ -1454,8 +1657,13 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 }
 
 .footer-contacts {
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.footer-contacts p {
+    margin: 0; /* Убираем лишние отступы у <p> */
+    font-size: 0.95rem; /* Явно задаём размер для параграфов */
 }
 
 .footer-contacts a {
@@ -1468,21 +1676,30 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     text-decoration: none;
 }
 
+.footer h5 {
+    font-size: 0.95rem; /* Унифицируем размер шрифта */
+    font-weight: 600;
+    margin-bottom: 15px;
+    line-height: 1.6; /* Добавляем для единообразия */
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 30px 0; /* Уменьшаем отступы для компактности */
+    }
+    .footer .col-md-4 {
+        flex: 0 0 100%; /* Каждая колонка занимает всю ширину */
+        max-width: 100%;
+        text-align: left !important; /* Унифицируем выравнивание */
+    }
+}
+
 @media (max-width: 576px) {
-    .footer-links a {
-        font-size: 0.9rem;
-    }
-    .footer-contacts {
-        font-size: 0.85rem;
-    }
-    .footer h5 {
-        font-size: 1rem;
-    }
     .footer-logo {
         height: 30px;
     }
-    .text-md-end {
-        text-align: center !important;
+    .footer .col-md-4 {
+        margin-bottom: 20px;
     }
 }
 
@@ -1508,4 +1725,172 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 @keyframes rotate {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+/* Стили для карточки блога с фоновым изображением */
+.blog-card-background {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 10px rgba(55, 159, 134, 0.3); /* Добавлено свечение */
+    border: 2px solid #379F86; /* Добавлена рамка */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.blog-card-background:hover {
+    transform: translateY(-8px); /* Увеличено смещение для большего акцента */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 0 20px rgba(55, 159, 134, 0.5); /* Усиленное свечение */
+    border-color: #4dae97; /* Лёгкое изменение цвета рамки при наведении */
+}
+
+.blog-card-background .content {
+    display: flex;
+    height: 400px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: white;
+}
+
+.blog-card-background .author-meta {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.85rem;
+}
+
+.blog-card-background .text-muted {
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin: 0;
+}
+
+.blog-card-background .custom-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+}
+
+.blog-card-background .custom-link:hover {
+    color: #d0d8c5;
+}
+
+.blog-card-background .card-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 15px;
+    color: white;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+}
+
+.blog-card-background .blog-excerpt {
+    font-size: 0.9rem;
+    text-align: center;
+    color: white;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+}
+
+.blog-card-background .tags {
+    display: flex;
+    overflow-x: auto;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 15px;
+    max-width: 100%;
+    flex-wrap: nowrap;
+}
+
+.blog-card-background .tags .badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    background: rgba(108, 117, 125, 0.8);
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+.blog-card-background .btn-read {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.95rem; /* Увеличен размер шрифта для большей выразительности */
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    text-decoration: none !important; /* Явно убираем подчеркивание */
+}
+
+.blog-card-background .btn-read:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Добавлено свечение при наведении */
+}
+
+/* Адаптивность для .blog-card-background и .btn-read */
+@media (max-width: 768px) {
+    .blog-card-background {
+        height: 300px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 8px rgba(55, 159, 134, 0.3);
+        border: 2px solid #379F86;
+    }
+    .blog-card-background:hover {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 0 15px rgba(55, 159, 134, 0.5);
+    }
+    .blog-card-background .card-title {
+        font-size: 1.4rem;
+    }
+    .blog-card-background .blog-excerpt {
+        font-size: 0.85rem;
+    }
+    .blog-card-background .author-meta {
+        font-size: 0.8rem;
+    }
+    .blog-card-background .tags .badge {
+        font-size: 0.65rem;
+        padding: 3px 6px;
+    }
+    .blog-card-background .btn-read {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .blog-card-background {
+        height: 280px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 6px rgba(55, 159, 134, 0.3);
+        border: 2px solid #379F86;
+    }
+    .blog-card-background:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 0 12px rgba(55, 159, 134, 0.5);
+    }
+    .blog-card-background .card-title {
+        font-size: 1.2rem;
+    }
+    .blog-card-background .blog-excerpt {
+        font-size: 0.8rem;
+    }
+    .blog-card-background .author-meta {
+        font-size: 0.75rem;
+    }
+    .blog-card-background .tags .badge {
+        font-size: 0.6rem;
+        padding: 2px 5px;
+    }
+    .blog-card-background .btn-read {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
 }

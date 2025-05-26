@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Post
 from .forms import PostForm
+from django.db.models import Q
 
 def blog_page(request):
     if not request.user.is_authenticated:
@@ -10,7 +11,20 @@ def blog_page(request):
         request.session['next'] = request.get_full_path()
         return redirect('auth_pages:registration')
 
-    posts = Post.objects.all().order_by('-created_at')
+    # Получение поискового запроса
+    query = request.GET.get('q', '')
+
+    # Фильтрация постов
+    posts = Post.objects.all()
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(tags__icontains=query)
+        )
+
+    posts = posts.order_by('-created_at')
+
     posts_data = []
     for post in posts:
         post_dict = {

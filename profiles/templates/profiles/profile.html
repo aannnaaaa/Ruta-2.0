@@ -130,9 +130,9 @@
     </div>
 
     <div id="blog" class="tab-content">
-        <div class="row">
+        <div class="row align-items-stretch">
             {% for post in posts %}
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4 mb-3 d-flex">
                     <a href="{% url 'blog:post_detail' post.slug %}" class="stretched-link" aria-label="Перейти к посту {{ post.title }}">
                         <div class="card blog-card">
                             <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/post-placeholder.jpg' %}{% endif %}" alt="{{ post.title }}" class="card-img-top">
