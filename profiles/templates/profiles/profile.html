@@ -18,7 +18,7 @@
     <div class="profile-header">
         <div class="profile-header-content">
             <div class="profile-avatar-container">
-                <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" alt="User Avatar" class="profile-image">
+                <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'images/default_avatar.jpg' %}{% endif %}" alt="User Avatar" class="profile-avatar">
             </div>
             <div class="profile-info">
                 <h1 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h1>
@@ -71,7 +71,7 @@
                                 </small>
                             </p>
                             {% if is_own_profile %}
-                                <form action="{% url 'profiles:toggle_trip_completion' trip.slug %}" method="post" class="d-inline">
+                                <form action="{% url 'profiles:toggle_trip_completion' trip.slug %}" method="post" class="d-inline trip-action">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-sm btn-primary">Отметить как посещённый</button>
                                 </form>
@@ -108,7 +108,7 @@
                                 </small>
                             </p>
                             {% if is_own_profile %}
-                                <form action="{% url 'profiles:toggle_trip_completion' trip.slug %}" method="post" class="d-inline">
+                                <form action="{% url 'profiles:toggle_trip_completion' trip.slug %}" method="post" class="d-inline trip-action">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-sm btn-secondary">Вернуть в запланированные</button>
                                 </form>
@@ -123,26 +123,24 @@
             {% endfor %}
             {% if is_own_profile %}
                 <div class="col-12 text-center mt-4">
-                    <a href="{% url 'trips:add_trip' %}" class="btn btn-custom-btn">Добавить маршрут</a>
+                    <a href="{% url 'trips:add_trip' %}" class="btn btn-add-trip">Добавить маршрут</a>
                 </div>
             {% endif %}
         </div>
     </div>
 
     <div id="blog" class="tab-content">
-        <div class="row align-items-stretch">
+        <div class="row blog-row align-items-stretch">
             {% for post in posts %}
                 <div class="col-md-4 mb-3 d-flex">
                     <a href="{% url 'blog:post_detail' post.slug %}" class="stretched-link" aria-label="Перейти к посту {{ post.title }}">
-                        <div class="card blog-card">
+                        <div class="card blog-card h-100">
                             <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/post-placeholder.jpg' %}{% endif %}" alt="{{ post.title }}" class="card-img-top">
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">{{ post.title }}</h5>
-                                <p class="card-text">{{ post.description|truncatechars:100 }}</p>
-                                <p class="card-text">
-                                    <small class="text-muted">
-                                        <a href="{% url 'profiles:profile-detail' username=post.user.username %}" class="custom-link">{{ post.user.username }}</a> | {{ post.created_at|date:"d.m.Y" }} | Просмотров: {{ post.views }}
-                                    </small>
+                                <p class="card-text mt-auto">{{ post.description|truncatechars:80 }}</p>
+                                <p class="text-muted">
+                                    <a href="{% url 'profiles:profile-detail' username=post.user.username %}" class="custom-link">{{ post.user.username|truncatechars:12}}</a> | {{ post.created_at|date:"d.m.Y" }} | Просмотров: {{ post.views }}
                                 </p>
                             </div>
                         </div>
@@ -169,6 +167,13 @@
 
                 button.classList.add('active');
                 document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Предотвращаем всплытие события клика для кнопок внутри карточек
+        document.querySelectorAll('.trip-action button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
             });
         });
     </script>

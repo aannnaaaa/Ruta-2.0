@@ -274,38 +274,68 @@ def edit_trip_view(request, slug):
 
     if request.method == 'POST':
         if step == 1:
-            form_data = {
-                'title': request.POST.get('title', ''),
-                'description': request.POST.get('description', ''),
-                'tags': request.POST.get('tags', ''),
-                'image_path': save_temp_file(request.FILES.get('image')) or form_data.get('image_path'),
-            }
-            request.session['trip_form_data'] = form_data
-            step = 2
+            if not request.FILES.get('image') and not form_data.get('image_path'):
+                messages.error(request, 'Изображение маршрута обязательно.')
+                step = 1
+            else:
+                form_data = {
+                    'title': request.POST.get('title', ''),
+                    'description': request.POST.get('description', ''),
+                    'tags': request.POST.get('tags', ''),
+                    'image_path': save_temp_file(request.FILES.get('image')) or form_data.get('image_path'),
+                }
+                request.session['trip_form_data'] = form_data
+                step = 2
 
         elif step == 2:
             if 'add_point' in request.POST:
-                point = {
-                    'id': None,
-                    'name': request.POST.get('point_name', ''),
-                    'point_type': request.POST.get('point_type', 'intermediate'),
-                    'address': request.POST.get('address', ''),
-                    'description': request.POST.get('point_description', ''),
-                    'lat': request.POST.get('lat', ''),
-                    'lng': request.POST.get('lng', ''),
-                    'image_path': save_temp_file(request.FILES.get('point_image')),
-                }
-                points.append(point)
-                request.session['trip_points'] = points
+                lat = request.POST.get('lat', '').strip()
+                lng = request.POST.get('lng', '').strip()
+                point_name = request.POST.get('point_name', '').strip()
+                address = request.POST.get('address', '').strip()
+
+                if not point_name:
+                    messages.error(request, 'Пожалуйста, введите название точки.')
+                elif not address:
+                    messages.error(request, 'Пожалуйста, укажите адрес точки.')
+                elif not lat or not lng:
+                    messages.error(request, 'Пожалуйста, выберите точку на карте.')
+                elif not request.FILES.get('point_image'):
+                    messages.error(request, 'Изображение точки обязательно.')
+                else:
+                    try:
+                        lat_float = float(lat)
+                        lng_float = float(lng)
+                        point = {
+                            'id': None,
+                            'name': point_name,
+                            'point_type': request.POST.get('point_type', 'intermediate'),
+                            'address': address,
+                            'description': request.POST.get('point_description', ''),
+                            'lat': lat,
+                            'lng': lng,
+                            'image_path': save_temp_file(request.FILES.get('point_image')),
+                        }
+                        points.append(point)
+                        request.session['trip_points'] = points
+                        request.session.modified = True
+                        messages.success(request, f'Точка "{point_name}" добавлена успешно!')
+                    except ValueError:
+                        messages.error(request, 'Неверные координаты. Пожалуйста, выберите точку на карте.')
             elif 'delete_point' in request.POST:
                 point_id = request.POST.get('delete_point')
                 points[:] = [p for p in points if str(p.get('id')) != point_id]
                 TripPoint.objects.filter(id=point_id).delete()
                 request.session['trip_points'] = points
+                request.session.modified = True
+                messages.success(request, 'Точка удалена.')
             elif 'next_step' in request.POST:
                 has_start = any(point['point_type'] == 'start' for point in points)
                 has_end = any(point['point_type'] == 'end' for point in points)
-                if not has_start or not has_end:
+                if len(points) < 2:
+                    messages.error(request, 'Маршрут должен содержать минимум 2 точки.')
+                    step = 2
+                elif not has_start or not has_end:
                     messages.error(request, 'Маршрут должен содержать хотя бы одну начальную и одну конечную точку.')
                     step = 2
                 else:
@@ -319,7 +349,10 @@ def edit_trip_view(request, slug):
             elif 'save' in request.POST:
                 has_start = any(point['point_type'] == 'start' for point in points)
                 has_end = any(point['point_type'] == 'end' for point in points)
-                if not has_start or not has_end:
+                if len(points) < 2:
+                    messages.error(request, 'Маршрут должен содержать минимум 2 точки.')
+                    step = 2
+                elif not has_start or not has_end:
                     messages.error(request, 'Маршрут должен содержать хотя бы одну начальную и одну конечную точку.')
                     step = 2
                 else:

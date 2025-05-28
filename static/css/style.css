@@ -7,11 +7,6 @@ html, body {
     background-color: #f4f7f6;
 }
 
-/* Убедимся, что шрифт применяется ко всем текстовым элементам */
-h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title, .section-title, .route-title, .blog-title {
-    font-family: 'Comfortaa', sans-serif !important;
-}
-
 /* Стили для кликабельных карточек */
 .stretched-link {
     text-decoration: none;
@@ -19,6 +14,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     display: block;
     position: relative;
     cursor: pointer;
+    z-index: 1;
 }
 
 .stretched-link::after {
@@ -28,18 +24,17 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1;
+    z-index: 2;
 }
 
 .trip-card, .blog-card {
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .trip-card:hover, .blog-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-    background-color: #d9eceb; /* Лёгкое затемнение фона при наведении */
 }
 
 /* Карточки для форм авторизации и добавления маршрута */
@@ -372,7 +367,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 
 .btn-primary {
     border-radius: 10px !important;
-    background: linear-gradient(45deg, #379f86, #4dae97);
+    background: #2d7f6b !important;
     border: none;
     color: white !important;
     font-size: 0.95rem;
@@ -418,7 +413,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 
 .custom-button {
     border-radius: 10px !important;
-    background: linear-gradient(45deg, #379f86, #4dae97) !important;
+    background: #2d7f6b !important;
     border: none !important;
     color: white !important;
     font-size: 0.95rem;
@@ -461,7 +456,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, .navbar-nav .nav-link, .hero-title,
 
 /* Адаптивные стили для кнопок */
 @media (max-width: 768px) {
-ständ    .custom-button, .btn-primary, .btn-sm.btn-primary, .btn-sm.btn-secondary, .btn-add-trip, .btn-add-post {
+    .custom-button, .btn-primary, .btn-sm.btn-primary, .btn-sm.btn-secondary, .btn-add-trip, .btn-add-post {
         padding: 10px 20px;
         font-size: 0.9rem;
         min-width: 100px;
@@ -566,19 +561,6 @@ ständ    .custom-button, .btn-primary, .btn-sm.btn-primary, .btn-sm.btn-seconda
     right: 20px;
 }
 
-.step-number {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #379F86;
-    color: white;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
 /* Карточка этапа маршрута */
 .trip-step-card {
     background: white !important;
@@ -609,12 +591,91 @@ ständ    .custom-button, .btn-primary, .btn-sm.btn-primary, .btn-sm.btn-seconda
 .profile-sections {
     margin-top: 40px;
     margin-bottom: 60px; /* Отступ перед футером */
-    padding: 20px;
+    padding: 15px;
     background: linear-gradient(135deg, #f4f7f6 0%, #e0f2f1 100%);
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
+/* Переопределяем стили для колонок в секции блога */
+.profile-sections .row.blog-row .col-md-4 {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 10px; /* Уменьшенный вертикальный отступ */
+}
+/* Стили для карточки блога в профиле */
+.profile-sections .blog-card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    background: #fff; /* Белый фон */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    width: 100%;
+}
 
+.profile-sections .blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    background-color: #fff; /* Без зелёного при наведении */
+}
+
+.profile-sections .blog-card .card-img-top {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.profile-sections .blog-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.profile-sections .blog-card .card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    min-height: 150px;
+}
+
+.profile-sections .blog-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    max-height: 3em;
+}
+
+.profile-sections .blog-card .card-text {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    margin-bottom: 6px;
+    max-height: 3em;
+}
+
+.profile-sections .blog-card .text-muted {
+    font-size: 0.7rem;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 1.6em;
+    margin-top: auto;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
 .profile-header {
     background: #fff;
     padding: 30px;
@@ -790,26 +851,13 @@ ständ    .custom-button, .btn-primary, .btn-sm.btn-primary, .btn-sm.btn-seconda
 .tab-content {
     display: none;
     background: #fff;
-    padding: 20px;
+    padding: 10px;
     border-radius: 0 0 10px 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .tab-content.active {
     display: block;
-}
-
-.trip-card, .blog-card {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    overflow: hidden;
-}
-
-.trip-card:hover, .blog-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 25px rgba(55, 159, 134, 0.2);
 }
 
 .trip-card .card-img-top, .blog-card .card-img-top {
@@ -1471,19 +1519,23 @@ ständ    .custom-button, .btn-primary, .btn-sm.btn-primary, .btn-sm.btn-seconda
     .blog-section .page-header {
         padding-top: 30px;
     }
-}card {
+}
+/* Стили для карточки блога */
+.blog-card {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
-    height: 300px; /* Компактная высота */
-    background: #e0f2f1; /* Фон в стиле карточек маршрутов */
+    height: 300px;
+    background: #e0f2f1;
+    display: flex;
+    flex-direction: column;
 }
 
 .blog-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    background-color: #d9eceb;
 }
 
 .blog-image {
