@@ -60,8 +60,9 @@
             {% for trip in planned_trips %}
                 <div class="col-md-4 mb-3">
                     <div class="card trip-card">
-                        <a href="{% url 'trips:trip_detail' trip.slug %}" class="stretched-link" aria-label="Перейти к маршруту {{ trip.title }}"></a>
+                        <a href="{% url 'trips:trip_detail' trip.slug %}">
                         <img src="{% if trip.image %}{{ trip.image.url }}{% else %}{% static 'images/trip_placeholder.jpg' %}{% endif %}" alt="{{ trip.title }}" class="card-img-top">
+                    </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ trip.title }}</h5>
                             <p class="card-text">{{ trip.description|truncatechars:100 }}</p>
@@ -97,8 +98,9 @@
             {% for trip in completed_trips %}
                 <div class="col-md-4 mb-3">
                     <div class="card trip-card">
-                        <a href="{% url 'trips:trip_detail' trip.slug %}" class="stretched-link" aria-label="Перейти к маршруту {{ trip.title }}"></a>
+                        <a href="{% url 'trips:trip_detail' trip.slug %}">
                         <img src="{% if trip.image %}{{ trip.image.url }}{% else %}{% static 'images/trip_placeholder.jpg' %}{% endif %}" alt="{{ trip.title }}" class="card-img-top">
+                    </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ trip.title }}</h5>
                             <p class="card-text">{{ trip.description|truncatechars:100 }}</p>
